@@ -1,7 +1,8 @@
 from django.db import models
 
+
 class Tag(models.Model):
-    name = models.ManyToManyField('Article', related_name='tegs')
+    name = models.CharField(max_length=30)
 
     class Meta:
         verbose_name = 'Тэг'
@@ -17,9 +18,7 @@ class Article(models.Model):
     text = models.TextField(verbose_name='Текст')
     published_at = models.DateTimeField(verbose_name='Дата публикации')
     image = models.ImageField(null=True, blank=True, verbose_name='Изображение',)
-    tags = models.ManyToManyField(Tag, related_name='articles')
-
-    #scopes
+    teg = models.ManyToManyField(Tag, verbose_name='Тег', related_name='tags', blank=True, through='scope')
 
     class Meta:
         verbose_name = 'Статья'
@@ -32,7 +31,7 @@ class Article(models.Model):
 
 class Scope(models.Model):
     article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name='scopes')
-    tag = models.ForeignKey(Tag, on_delete=models.CASCADE, default=None,  related_name='scopes')
+    tag = models.ForeignKey(Tag, on_delete=models.CASCADE, verbose_name='Раздел')
 
     class Meta:
         verbose_name = 'Тэг'
